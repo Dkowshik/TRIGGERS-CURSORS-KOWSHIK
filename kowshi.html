@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Triggers & Cursors</title>
+  <link rel="stylesheet" href="layout.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+
+      window.onscroll = function() {
+        myFunction()
+      };
+
+      var header = document.getElementById("myHeader");
+      var sticky = header.offsetTop;
+
+      function myFunction() {
+        if (window.pageYOffset > sticky) {
+          header.classList.add("sticky");
+        } else {
+          header.classList.remove("sticky");
+        }
+      }
+
+      $(".divAction").click(function() {
+        var section = $(this).attr("section");
+        $(".menu div").css('color', 'black');
+        $(this).css('color', '#8533ff ');
+        $('.divContent').hide();
+        $('#' + section).show();
+
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <style>
+    body {
+      width: 100%;
+      background: url('luke-chesser-IGtutkXikuc-unsplash.jpg') 50% 0 no-repeat fixed;
+      background-size: cover;
+    }
+
+    .centre {
+      color: black;
+      text-align: center;
+    }
+
+    .divBorder {
+      border: 1px solid black;
+      background-color: #8533ff;
+      color: white;
+    }
+
+    .submenu {
+      padding-left: 20px;
+    }
+
+    .sticky {
+      position: fixed;
+      top: 0;
+      width: 100%;
+    }
+
+    .content {
+      padding-top: 60px;
+    }
+
+    .divContent {
+      padding-left: 150px;
+    }
+  </style>
+  <header id='myHeader' style="position: fixed;top: 0;width:100%">
+    <h1 class="centre"> Triggers & Cursors </h1>
+  </header>
+  <section>
+    <div class="content">
+      <nav>
+        <div>
+          <div class='menu'>
+            <div class='divAction' section="TriggerMain" style="color:#8533ff">Triggers</div>
+            <div class='submenu'>
+              <div class='divAction' section="createTriggerMain">Create</div>
+            </div>
+            <div class='submenu'>
+              <div class='divAction' section="dropTriggerMain">Drop</div>
+            </div>
+          </div>
+          <div class='menu'>
+            <div class='divAction' section="CursorMain">Cursors</div>
+            <div class="submenu">
+              <div class='divAction' section="ImplicitcursorMain">Implicit</div>
+            </div>
+            <div class="submenu">
+              <div class='divAction' section="ExplicitcursorMain">Explicit</div>
+            </div>
+      </nav>
+    </div>
+    <div id='TriggerMain' class='divContent'>
+      <h2>Trigger</h2>
+      <p> In MySQL, a trigger is a stored program invoked automatically in response to an event such as insert, update, or delete that occurs in the associated table. For example, you can define a trigger that is invoked automatically before a new
+        row is inserted into a table.
+        MySQL supports triggers that are invoked in response to the INSERT, UPDATE or DELETE event.
+        The SQL standard defines two types of triggers: row-level triggers and statement-level triggers.
+        A row-level trigger is activated for each row that is inserted, updated, or deleted. For example, if a table has 100 rows inserted, updated, or deleted, the trigger is automatically invoked 100 times for the 100 rows affected.
+        A statement-level trigger is executed once for each transaction regardless of how many rows are inserted, updated, or deleted.
+        MySQL supports only row-level triggers. It doesn’t support statement-level triggers
+      </p>
+      <img src=" https://sp.mysqltutorial.org/wp-content/uploads/2019/09/MySQL-Triggers.png" alt=" https://sp.mysqltutorial.org/wp-content/uploads/2019/09/MySQL-Triggers" class="centre">
+      <h1> Advantages of triggers</h1>
+      <ul>
+        <li>Triggers provide another way to check the integrity of data.</li>
+        <li>Triggers handle errors from the database layer.</li>
+        <li>Triggers give an alternative way to run scheduled tasks.</li>
+        <li>By using triggers, you don’t have to wait for the scheduled events to run because the
+          triggers are invoked automatically <em>before</em> or <em>after</em> a change is made to the data in a table.</li>
+        <li>Triggers can be useful for auditing the data changes in tables.</li>
+      </ul>
+
+
+      <h1>Disadvantages of triggers</h1>
+      <ul>
+        <li>Triggers can only provide extended validations, not all validations. For simple validations, you can use the UNIQUE,CHECK and FOREIGN KEY constraints.
+        </li>
+        <li>Triggers can be difficult to troubleshoot because they execute automatically in the database, which may not invisible to the client applications.</li>
+        <li>Triggers may increase the overhead of the MySQL Server.</li>
+      </ul>
+
+    </div>
+    <div id='createTriggerMain' class='divContent' style="display:none">
+      <h2>Introduction to MySQL <code>CREATE TRIGGER</code> statement</h2>
+      <p>The CREATE TRIGGER statement creates a new trigger. Here is the basic syntax of the <code>CREATE TRIGGER statement:</p>
+      <p>In this syntax:</p>
+      <ul>
+        <li>First, specify the name of the trigger that you want to create after the <code>CREATE TRIGGER</code> keywords. Note that the trigger name must be unique within a database.</li>
+        <li>Next, specify the trigger action time which can be either <code>BEFORE</code> or <code>AFTER</code> which indicates that the trigger is invoked before or after each row is modified.</li>
+        <li>Then, specify the operation that activates the trigger, which can be <code>INSERT</a></code>, <code><a>UPDATE</a></code>, or <code>DELETE</a></code>.</li>
+        <li>After that, specify the name of the table to which the trigger belongs after the <code>ON</code> keyword.</li>
+        <li>Finally, specify the statement to execute when the trigger activates. If you want to execute multiple statements, you use the <code>BEGIN END</code> compound statement.</li>
+      </ul>
+      <p> The trigger body can access the values of the column being affected by the DML statement.</p>
+      <p>To distinguish between the value of the columns BEFORE and AFTER the DML has fired, you use the NEW and OLD modifiers.</p>
+      <p>For example, if you update the column description, in the trigger body, you can access the value of the description before the update OLD.description and the new value NEW.description.</p>
+      <p> The following table illustrates the availability of the OLD and NEW modifiers:</p>
+      <table>
+        <tbody>
+          <tr>
+            <td>Trigger Event</td>
+            <td><code>OLD</code></td>
+            <td><code>NEW</code></td>
+          </tr>
+          <tr>
+            <td><code>INSERT</code></td>
+            <td>No</td>
+            <td>Yes</td>
+          </tr>
+          <tr>
+            <td><code>UPDATE</code></td>
+            <td>Yes</td>
+            <td>Yes</td>
+          </tr>
+          <tr>
+            <td><code>DELETE</code></td>
+            <td>Yes</td>
+            <td>No</td>
+          </tr>
+        </tbody>
+      </table>
+      <h2>MySQL trigger examples</h2>
+      <p>Let’s start creating a trigger in MySQL to log&nbsp;the changes of the <code>employees</code> table.</p>
+      <figure class="wp-block-image">
+        <noscript><img src="https://sp.mysqltutorial.org/wp-content/uploads/2019/08/employees.png" alt="" class="wp-image-8120"
+            srcset="https://sp.mysqltutorial.org/wp-content/uploads/2019/08/employees.png 163w, https://sp.mysqltutorial.org/wp-content/uploads/2019/08/employees-160x200.png 160w" sizes="(max-width: 163px) 100vw, 163px" /></noscript>
+        <img src="https://sp.mysqltutorial.org/wp-content/uploads/2019/08/employees.png" data-src="https://sp.mysqltutorial.org/wp-content/uploads/2019/08/employees.png" alt="" class="wp-image-8120 lazyloaded"
+          data-srcset="https://sp.mysqltutorial.org/wp-content/uploads/2019/08/employees.png 163w, https://sp.mysqltutorial.org/wp-content/uploads/2019/08/employees-160x200.png 160w" data-sizes="(max-width: 163px) 100vw, 163px"
+          sizes="(max-width: 163px) 100vw, 163px" srcset="https://sp.mysqltutorial.org/wp-content/uploads/2019/08/employees.png 163w, https://sp.mysqltutorial.org/wp-content/uploads/2019/08/employees-160x200.png 160w">
+      </figure>
+      <p>First, create a new table</a> named <code>employees_audit</code> to keep the changes to the <code>employees</code> table:</p>
+        <img src="30.PNG">
+      <p> First, create a new table named employees_audit to keep the changes to the employees table:</p>
+        <img src="31.PNG">
+      <p>Next, create a <code>BEFORE UPDATE</code> trigger that is&nbsp;invoked before a change is made to the <code>employees</code> table.</p>
+        <img src="32.PNG" width="872">
+
+    </div>
+    <div id='dropTriggerMain' class='divContent' style="display:none">
+
+      <h2>Introduction to MySQL <code>DROP TRIGGER</code> statement</h2>
+      <p>The <code>DROP TRIGGER</code> statement deletes a trigger from the database.</p>
+      <p>Here is the basic syntax of the <code>DROP TRIGGER</code> statement:</p>
+      <img src="11.PNG"width="870">
+      <p>In this syntax:</p>
+      <ul>
+        <li>First, specify the name of the trigger that you want to drop after the <code>DROP TRIGGER</code> keywords.</li>
+        <li>Second, specify the name of the schema to which the trigger belongs. If you skip the schema name, the statement will drop the trigger in the current database.</li>
+        <li>Third, use <code>IF EXISTS</code> option to conditionally drops the trigger if the trigger exists. The <code>IF EXISTS</code> clause is optional.</li>
+      </ul>
+      <p>If you drop a trigger that does not exist without using the <code>IF EXISTS</code> clause, MySQL issues an error. However, if you use the <code>IF EXISTS</code> clause, MySQL issues a <code>NOTE</code> instead.</p>
+      <p>The <code>DROP TRIGGER</code> requires the <code>TRIGGER</code> privilege for the table associated with the trigger.</p>
+      <p>Note that if you drop a table</a>, MySQL will automatically drop all triggers associated with the table.</p>
+      <h2>MySQL <code>DROP TRIGGER</code> example</h2>
+      <p>First,create a table</a> called <code>billings</code> for demonstration:</p>
+      <img src="12.PNG">
+      <p>Second,create a new trigger</a> called <code>BEFORE UPDATE</code> that is associated with the <code>billings</code> table:</p>
+      <img src="13.PNG">
+      <p>If you are not familiar with the <code>DELIMITER</code> statement, check it out here in the stored procedure statement</a>.</p>
+      <p>The trigger activates before any update. If the new amount is 10 times greater than the current amount, the trigger raises an error.</p>
+      <p>Third, show the triggers:</p>
+      <img src="14.PNG">
+      <img src="15.PNG">
+      <p>Fourth, drop the <code>before_billing_update</code> trigger:</p>
+      <img src="16.PNG">
+      <p>Finally, show the triggers again to verify the removal:</p>
+      <img src="17.PNG">
+    </div>
+    <div id='CursorMain' class='divContent' style="display:none;">
+
+      <h1>cursors</h1>
+
+      <p>Oracle creates a memory area, known as the context area, for processing an SQL statement, which contains all the information needed for processing the statement; for example, the number of rows processed, etc. </p>
+      <p>A cursor is a pointer to this context area. PL/SQL controls the context area through a cursor. A cursor holds the rows (one or more) returned by a SQL statement. The set of rows the cursor holds is referred to as the active set. </p>
+      <p>You can name a cursor so that it could be referred to in a program to fetch and process the rows returned by the SQL statement, one at a time. There are two types of cursors − </p>
+      <ul>
+        <li>Implicit Cursors</li>
+        <li>Explicit cursors</li>
+      </ul>
+    </div>
+    <div id='ImplicitcursorMain' class='divContent' style="display:none">
+
+      <h2>Implicit Cursors </h2>
+      <p>
+      <p>Whenever a DML statement (INSERT, UPDATE and DELETE) is issued, an implicit cursor is associated with this statement. For INSERT operations, the cursor holds the data that needs to be inserted. For UPDATE and DELETE operations, the cursor
+        identifies the rows that would be affected.</p>
+      </p>
+      <p>
+      <p>In PL/SQL, you can refer to the most recent implicit cursor as the <b>SQL cursor</b>, which always has attributes such as <b>%FOUND, %ISOPEN, %NOTFOUND</b>, and <b>%ROWCOUNT</b>. The SQL cursor has additional attributes,
+        <b>%BULK_ROWCOUNT</b>
+        and <b>%BULK_EXCEPTIONS</b>, designed for use with the <b>FORALL</b> statement. The following table provides the description of the most used attributes −</p>
+      </p>
+      <img src="1.png">
+      <p>Any SQL cursor attribute will be accessed as <b>sql%attribute_name</b> as shown below in the example.</p>
+      <h3>Example</h3>
+      <p>We will be using the CUSTOMERS table we had created and used in the previous chapters.</p>
+      <img src="2.PNG">
+      <p>The following program will update the table and increase the salary of each customer by 500 and use the <b>SQL%ROWCOUNT</b> attribute <br>to determine the number of rows affected −</p>
+      <img src="3.PNG">
+      <p>When the above code is executed at the SQL prompt, it produces the following result −</p>
+      <img src="4.PNG">
+      <p>If you check the records in customers table, you will find that the rows have been updated −</p>
+      <img src="5.PNG">
+
+    </div>
+    <div id='ExplicitcursorMain' class='divContent' style="display:none">
+      <h2>Explicit Cursors</h2>
+      <p>Explicit cursors are programmer-defined cursors for gaining more control over the <b>context area</b>. An explicit cursor should be defined in the declaration section of the PL/SQL Block. It is created on a SELECT Statement which returns
+        more than one row.</p>
+      <p>The syntax for creating an explicit cursor is −</p>
+      <img src="6.PNG">
+      <p>Working with an explicit cursor includes the following steps −</p>
+      <ul class="list">
+        <li>Declaring the cursor for initializing the memory</li>
+        <li>Opening the cursor for allocating the memory</li>
+        <li>Fetching the cursor for retrieving the data</li>
+        <li>Closing the cursor to release the allocated memory</li>
+      </ul>
+      <h1>Declaring the Cursor</h1>
+      <p>Declaring the cursor defines the cursor with a name and the associated SELECT statement. For example −</p>
+      <img src="7.PNG">
+      <h2>Opening the Cursor</h2>
+      <p>Opening the cursor allocates the memory for the cursor and makes it ready for fetching the rows returned by the SQL statement into it.<br>
+        For example, we will open the above defined cursor as follows −</p>
+      <img src="8.PNG">
+      <h2>Fetching the Cursor</h2>
+      <p>Fetching the cursor involves accessing one row at a time. For example, we will fetch rows from the above-opened cursor as follows −</p>
+      <img src="9.PNG">
+      <h2>Closing the Cursor</h2>
+      <p>Closing the cursor means releasing the allocated memory. For example, we will close the above-opened cursor as follows −</p>
+      <img src="10.PNG">
+      <h3>Example</h3>
+      <p>Following is a complete example to illustrate the concepts of explicit cursors &amp;minua;</p <img src="big1.PNG">
+      <p>When the above code is executed at the SQL prompt, it produces the following result −</p>
+      <img src="big2.PNG">
+      </div>
+    </div>
+    <footer>
+
+      <p>Created by D.N.S KOWSHIK 19BCE1363</p>
+    </footer>
+
+</body>
+
+
+</html>
